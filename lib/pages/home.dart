@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PageController pageController = PageController();
+  var index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +41,14 @@ class _HomePageState extends State<HomePage> {
                 child: FlutterLogo(),
               ),
             )),
-            onDestinationSelected: (i) => pageController.jumpToPage(i),
+            onDestinationSelected: (i) {
+              setState(() {
+                index = i;
+              });
+              pageController.jumpToPage(i);
+            },
             destinations: destination,
-            selectedIndex: 1,
+            selectedIndex: index,
           ),
           Expanded(
             child: PageView(controller: pageController, children: [
@@ -51,20 +57,25 @@ class _HomePageState extends State<HomePage> {
                 alignment: Alignment.topLeft,
                 child: ListView.builder(
                     controller: ScrollController(),
-                    itemCount: flutterName.length,
+                    itemCount: navigatorList.length,
                     itemBuilder: (BuildContext context, int i) {
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            flutterName[i],
-                            style: Theme.of(context).textTheme.titleMedium,
+                      return ConstrainedBox(
+                        constraints: const BoxConstraints(minHeight: 100),
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                navigatorList[i],
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
                           ),
                         ),
                       );
                     }),
               ),
-              Text("2")
+              const Text("2")
             ]),
           ),
         ],
